@@ -1,8 +1,21 @@
 /*
  * Create a list that holds all of your cards
  */
+//the deck
+const deck = document.querySelector('.deck');
 
+//cards
+let card = document.getElementsByClassName('card');
 
+//stars
+document.getElementsByClassName('star');
+
+//timer variables
+const timerLabel = document.getElementById('timer');
+let minutesTimer = document.getElementById('minutes');
+let secondsTimer = document.getElementById('seconds');
+
+//
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -36,3 +49,11 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+ //Timer
+ let totalSeconds = 0;
+ function timer(){
+   ++totalSeconds;
+   secondsTimer.innerHTML = pad(totalSeconds % 60);
+   minutesTimer.innerHTML = pad(totalSeconds / 60);
+ }
