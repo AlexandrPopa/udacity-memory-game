@@ -6,11 +6,16 @@ const deck = document.querySelector('.deck');
 
 //cards and opened cards
 let card = document.getElementsByClassName('card');
+let cards = [...card];
 let openedCards = [];
+let matchedCards = 0;
+let matchedCard = document.getElementsByClassName('match');
 
 //stars
 document.getElementsByClassName('star');
 let starRating = '3 stars';
+const thirdStar = document.getElementById('third-star');
+const secondStar = document.getElementById('second-star');
 
 //timer variables
 const timerLabel = document.getElementById('timer');
@@ -60,6 +65,17 @@ function shuffle(array) {
  function cardOpen(){
    this.classList.add('open', 'show');
    openedCards.push(this);
+   let openNumber = openedCards.length;
+   if(openNumber == 2){
+     if(openedCards[0].className == openedCards[1]){
+       openedCards.forEach(match);
+       openedCards = [];
+       matchedCards += 2;
+     } else {
+       openedCards.forEach(noMatch);
+       openedCards = [];
+     }
+   }
  }
 
  //moves counter
@@ -68,16 +84,24 @@ function shuffle(array) {
    movesNumber.innerHTML = movesCount;
 
    //star rating
-   const thirdStar = document.getElementById('third-star');
-   const secondStar = document.getElementById('second-star');
-   if(movesCount >= 15 && movesCount <= 22){
+   if(movesCount >= 28 && movesCount <= 40){
      thirdStar.className = 'lost-star';
      starRating = '2 stars';
-   } else if(movesCount > 22){
+   } else if(movesCount > 40){
      thirdStar.className = 'lost-star';
      secondStar.className = 'lost-star';
      starRating = '1 star';
    }
+ }
+
+ //match function
+ function match(openedCard){
+   openedCard.classList.add('match');
+ }
+
+ //in case it didn't match
+ function noMatch(openedCard){
+   openedCard.classList.remove('open', 'show');
  }
 
  //Timer
