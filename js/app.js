@@ -4,17 +4,22 @@
 //the deck
 const deck = document.querySelector('.deck');
 
-//cards
+//cards and opened cards
 let card = document.getElementsByClassName('card');
+let openedCards = [];
 
 //stars
 document.getElementsByClassName('star');
+let starRating = '3 stars';
 
 //timer variables
 const timerLabel = document.getElementById('timer');
 let minutesTimer = document.getElementById('minutes');
 let secondsTimer = document.getElementById('seconds');
 
+//moves variables
+let movesCount = 0;
+let movesNumber = document.getElementById('moves-number');
 //
 /*
  * Display the cards on the page
@@ -49,6 +54,31 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+
+ //fuction for showing symbol
+ function cardOpen(){
+   this.classList.add('open', 'show');
+   openedCards.push(this);
+ }
+
+ //moves counter
+ function counter(){
+   ++movesCount;
+   movesNumber.innerHTML = movesCount;
+
+   //star rating
+   const thirdStar = document.getElementById('third-star');
+   const secondStar = document.getElementById('second-star');
+   if(movesCount >= 15 && movesCount <= 22){
+     thirdStar.className = 'lost-star';
+     starRating = '2 stars';
+   } else if(movesCount > 22){
+     thirdStar.className = 'lost-star';
+     secondStar.className = 'lost-star';
+     starRating = '1 star';
+   }
+ }
 
  //Timer
  let totalSeconds = 0;
