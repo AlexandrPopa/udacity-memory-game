@@ -22,9 +22,13 @@ const timerLabel = document.getElementById('timer');
 let minutesTimer = document.getElementById('minutes');
 let secondsTimer = document.getElementById('seconds');
 
+//restart button
+let restartButton = document.querySelector('.restart');
+
 //moves variables
 let movesCount = 0;
 let movesNumber = document.getElementById('moves-number');
+let movesText = document.getElementById('moves-text');
 //
 /*
  * Display the cards on the page
@@ -59,18 +63,45 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+ document.body.onload = gameOn();
+//function for starting a new game
+function gameOn(){
+  openedCards = [];
+  matchedCards = 0;
+  movesCount = 0;
+  movesNumber.innerHTML = movesCount;
+  thirdStar.classList.remove('lost-star');
+  secondStar.classList.remove('lost-star');
+  cards = shuffle(cards);
+  for (let i = 0; i < cards.length; i++){
+        deck.innerHTML = "";
+        [].forEach.call(cards, function(item) {
+            deck.appendChild(item);
+        });
+		cards[i].classList.remove('open', 'show', 'done', 'match');
+    cards[i].addEventListener('click', turn);
+		cards[i].addEventListener('click', cardOpen);
+    cards[i].addEventListener('click', counter);
+	};
+}
 
+//function for showing symbol
+function turn(){
+    this.classList.add('open', 'show', 'done');
+}
 
- //fuction for showing symbol
+ //fuction for opening a card
  function cardOpen(){
-   this.classList.add('open', 'show');
    openedCards.push(this);
    let openNumber = openedCards.length;
    if(openNumber == 2){
-     if(openedCards[0].className == openedCards[1]){
+     if(openedCards[0].className == openedCards[1].className){
        openedCards.forEach(match);
        openedCards = [];
        matchedCards += 2;
+       if (matchedCards == 16){
+         gameOn();
+       }
      } else {
        openedCards.forEach(noMatch);
        openedCards = [];
@@ -82,6 +113,11 @@ function shuffle(array) {
  function counter(){
    ++movesCount;
    movesNumber.innerHTML = movesCount;
+   if(movesCount == 1){
+     movesText.innerHTML = 'move';
+   } else {
+     movesText.innerHTML = 'moves';
+   }
 
    //star rating
    if(movesCount >= 28 && movesCount <= 40){
@@ -101,7 +137,9 @@ function shuffle(array) {
 
  //in case it didn't match
  function noMatch(openedCard){
-   openedCard.classList.remove('open', 'show');
+   setTimeout(function(){
+     openedCard.classList.remove('open', 'show', 'done');
+   }, 500);
  }
 
  //Timer
@@ -111,3 +149,6 @@ function shuffle(array) {
    secondsTimer.innerHTML = pad(totalSeconds % 60);
    minutesTimer.innerHTML = pad(totalSeconds / 60);
  }
+
+ //restart button functionality
+ restartButton.addEventListener('click', gameOn);
