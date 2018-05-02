@@ -121,3 +121,18 @@ h1 {
 .lost-star {
   visibility: hidden;
 }
+
+#win-modal {
+  display: none;
+  z-index: 1;
+  width: 180px;
+  height: 200px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background-color: white;
+}
+
+.modal-body {
+  text-align: center;
+}

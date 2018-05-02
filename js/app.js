@@ -16,6 +16,7 @@ document.getElementsByClassName('star');
 let starRating = '3 stars';
 const thirdStar = document.getElementById('third-star');
 const secondStar = document.getElementById('second-star');
+let endStars = document.getElementById('end-stars');
 
 //timer variables
 const timerLabel = document.getElementById('timer');
@@ -29,7 +30,9 @@ let restartButton = document.querySelector('.restart');
 let movesCount = 0;
 let movesNumber = document.getElementById('moves-number');
 let movesText = document.getElementById('moves-text');
-//
+
+//variables for modal
+let playAgain = document.getElementById('play-again');
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -100,7 +103,7 @@ function turn(){
        openedCards = [];
        matchedCards += 2;
        if (matchedCards == 16){
-         gameOn();
+         congratulate();
        }
      } else {
        openedCards.forEach(noMatch);
@@ -121,11 +124,10 @@ function turn(){
 
    //star rating
    if(movesCount >= 28 && movesCount <= 40){
-     thirdStar.className = 'lost-star';
+     thirdStar.classList.add('lost-star');
      starRating = '2 stars';
    } else if(movesCount > 40){
-     thirdStar.className = 'lost-star';
-     secondStar.className = 'lost-star';
+     secondStar.classList.add('lost-star');
      starRating = '1 star';
    }
  }
@@ -148,6 +150,12 @@ function turn(){
    ++totalSeconds;
    secondsTimer.innerHTML = pad(totalSeconds % 60);
    minutesTimer.innerHTML = pad(totalSeconds / 60);
+ }
+
+ function congratulate(){
+   endStars.innerText = starRating;
+   $("#win-modal").modal("show");
+   playAgain.addEventListener('click', gameOn);
  }
 
  //restart button functionality
