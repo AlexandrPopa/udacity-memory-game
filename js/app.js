@@ -22,6 +22,10 @@ let endStars = document.getElementById('end-stars');
 const timerLabel = document.getElementById('timer');
 let minutesTimer = document.getElementById('minutes');
 let secondsTimer = document.getElementById('seconds');
+let minutes = 0;
+let seconds = 0;
+let endTime = document.getElementById('end-time');
+let timeCount = 0;
 
 //restart button
 let restartButton = document.querySelector('.restart');
@@ -69,6 +73,7 @@ function shuffle(array) {
  document.body.onload = gameOn();
 //function for starting a new game
 function gameOn(){
+  resetTimer();
   openedCards = [];
   matchedCards = 0;
   movesCount = 0;
@@ -118,6 +123,7 @@ function turn(){
    movesNumber.innerHTML = movesCount;
    if(movesCount == 1){
      movesText.innerHTML = 'move';
+     timer();
    } else {
      movesText.innerHTML = 'moves';
    }
@@ -145,15 +151,38 @@ function turn(){
  }
 
  //Timer
- let totalSeconds = 0;
- function timer(){
-   ++totalSeconds;
-   secondsTimer.innerHTML = pad(totalSeconds % 60);
-   minutesTimer.innerHTML = pad(totalSeconds / 60);
- }
+function timer(){
+  let start = new Date().getTime();
+  timeCount = setInterval(()=>{
+    let now = new Date().getTime();
+    let elapsed = now - start;
+    minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+    seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+    secondsTimer.innerHTML = pad(seconds);
+    minutesTimer.innerHTML = pad(minutes);
+  }, 1000)
+}
 
+function pad(val){
+ var valString = val + "";
+ if (valString.length < 2) {
+   return "0" + valString;
+ } else {
+   return valString;
+ }
+}
+
+function resetTimer(){
+  clearInterval(timeCount);
+  secondsTimer.innerHTML = 0;
+  minutesTimer.innerHTML = 0;
+}
+
+//modal for finishing the game
  function congratulate(){
    endStars.innerText = starRating;
+   endTime.innerText = 'in ' + minutes + ' minutes and ' + seconds + ' seconds';
+   resetTimer();
    $("#win-modal").modal("show");
    playAgain.addEventListener('click', gameOn);
  }
