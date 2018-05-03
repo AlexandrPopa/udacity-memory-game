@@ -125,16 +125,29 @@ h1 {
 #win-modal {
   display: none;
   z-index: 1;
-  width: 180px;
-  height: 230px;
+  width: 50%;
+  height: 200px;
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 25%;
+  top: 25%;
   background-color: white;
 }
 
 .modal-body {
   text-align: center;
+}
+
+.modal-title {
+    text-align: center;
+  }
+
+.modal-footer {
+    text-align: right;
+    margin-right: 15px;
+}
+
+.done {
+  pointer-events: none;
 }
 
 @media (max-width: 880px) {

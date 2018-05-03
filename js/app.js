@@ -9,7 +9,6 @@ let card = document.getElementsByClassName('card');
 let cards = [...card];
 let openedCards = [];
 let matchedCards = 0;
-let matchedCard = document.getElementsByClassName('match');
 
 //stars
 document.getElementsByClassName('star');
@@ -19,7 +18,6 @@ const secondStar = document.getElementById('second-star');
 let endStars = document.getElementById('end-stars');
 
 //timer variables
-const timerLabel = document.getElementById('timer');
 let minutesTimer = document.getElementById('minutes');
 let secondsTimer = document.getElementById('seconds');
 let minutes = 0;
@@ -46,17 +44,18 @@ let playAgain = document.getElementById('play-again');
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+  var currentIndex = array.length,
+    temporaryValue, randomIndex;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
 
-    return array;
+  return array;
 }
 
 
@@ -70,9 +69,9 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
- document.body.onload = gameOn();
+document.body.onload = gameOn();
 //function for starting a new game
-function gameOn(){
+function gameOn() {
   resetTimer();
   openedCards = [];
   matchedCards = 0;
@@ -81,111 +80,115 @@ function gameOn(){
   thirdStar.classList.remove('lost-star');
   secondStar.classList.remove('lost-star');
   cards = shuffle(cards);
-  for (let i = 0; i < cards.length; i++){
-        deck.innerHTML = "";
-        [].forEach.call(cards, function(item) {
-            deck.appendChild(item);
-        });
-		cards[i].classList.remove('open', 'show', 'done', 'match');
+  for (let i = 0; i < cards.length; i++) {
+    deck.innerHTML = "";
+    [].forEach.call(cards, function(item) {
+      deck.appendChild(item);
+    });
+    cards[i].classList.remove('open', 'show', 'done', 'match');
     cards[i].addEventListener('click', turn);
-		cards[i].addEventListener('click', cardOpen);
-    cards[i].addEventListener('click', counter);
-	};
+    cards[i].addEventListener('click', cardOpen);
+  };
 }
 
 //function for showing symbol
-function turn(){
-    this.classList.add('open', 'show', 'done');
+function turn() {
+  this.classList.add('open', 'show', 'done');
 }
 
- //fuction for opening a card
- function cardOpen(){
-   openedCards.push(this);
-   let openNumber = openedCards.length;
-   if(openNumber == 2){
-     if(openedCards[0].className == openedCards[1].className){
-       openedCards.forEach(match);
-       openedCards = [];
-       matchedCards += 2;
-       if (matchedCards == 16){
-         congratulate();
-       }
-     } else {
-       openedCards.forEach(noMatch);
-       openedCards = [];
-     }
-   }
- }
+//fuction for opening a card
+function cardOpen() {
+  openedCards.push(this);
+  let openNumber = openedCards.length;
+  if (openNumber == 2) {
+    counter();
+    if (openedCards[0].className == openedCards[1].className) {
+      openedCards.forEach(match);
+      openedCards = [];
+      matchedCards += 2;
+      if (matchedCards == 16) {
+        congratulate();
+      }
+    } else {
+      deck.classList.add('done');
+      openedCards.forEach(noMatch);
+      openedCards = [];
+      setTimeout(function() {
+        deck.classList.remove('done');
+      }, 500);
+    }
+  }
+}
 
- //moves counter
- function counter(){
-   ++movesCount;
-   movesNumber.innerHTML = movesCount;
-   if(movesCount == 1){
-     movesText.innerHTML = 'move';
-     timer();
-   } else {
-     movesText.innerHTML = 'moves';
-   }
+//moves counter
+function counter() {
+  ++movesCount;
+  movesNumber.innerHTML = movesCount;
+  if (movesCount == 1) {
+    movesText.innerHTML = 'move';
+    timer();
+  } else {
+    movesText.innerHTML = 'moves';
+  }
 
-   //star rating
-   if(movesCount >= 28 && movesCount <= 40){
-     thirdStar.classList.add('lost-star');
-     starRating = '2 stars';
-   } else if(movesCount > 40){
-     secondStar.classList.add('lost-star');
-     starRating = '1 star';
-   }
- }
+  //star rating
+  if (movesCount >= 14 && movesCount <= 20) {
+    thirdStar.classList.add('lost-star');
+    starRating = '2 stars';
+  } else if (movesCount > 20) {
+    secondStar.classList.add('lost-star');
+    starRating = '1 star';
+  }
+}
 
- //match function
- function match(openedCard){
-   openedCard.classList.add('match');
- }
+//match function
+function match(openedCard) {
+  openedCard.classList.add('match');
+}
 
- //in case it didn't match
- function noMatch(openedCard){
-   setTimeout(function(){
-     openedCard.classList.remove('open', 'show', 'done');
-   }, 500);
- }
+//in case it didn't match
+function noMatch(openedCard) {
+  setTimeout(function() {
+    openedCard.classList.remove('open', 'show', 'done');
+  }, 500);
+}
 
- //Timer
-function timer(){
+//Timer
+function timer() {
   let start = new Date().getTime();
-  timeCount = setInterval(()=>{
+  timeCount = setInterval(() => {
     let now = new Date().getTime();
     let elapsed = now - start;
     minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
     seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
     secondsTimer.innerHTML = pad(seconds);
     minutesTimer.innerHTML = pad(minutes);
-  }, 1000)
+  }, 1000);
 }
 
-function pad(val){
- var valString = val + "";
- if (valString.length < 2) {
-   return "0" + valString;
- } else {
-   return valString;
- }
+function pad(val) {
+  let valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
 }
 
-function resetTimer(){
+function resetTimer() {
   clearInterval(timeCount);
-  secondsTimer.innerHTML = 0;
-  minutesTimer.innerHTML = 0;
+  secondsTimer.innerHTML = '00';
+  minutesTimer.innerHTML = '00';
 }
 
 //modal for finishing the game
- function congratulate(){
-   endStars.innerText = starRating;
-   endTime.innerText = 'in ' + minutes + ' minutes and ' + seconds + ' seconds';
-   resetTimer();
-   $("#win-modal").modal("show");
-   playAgain.addEventListener('click', gameOn);
- }
+function congratulate() {
+  endStars.innerText = starRating;
+  endTime.innerText = 'in ' + minutes + ' minutes and ' + seconds + ' seconds';
+  resetTimer();
+  $("#win-modal").modal("show");
+  playAgain.addEventListener('click', gameOn);
+}
 
- //restart button functionality
- restartButton.addEventListener('click', gameOn);
+//restart button functionality
+restartButton.addEventListener('click', gameOn);
